@@ -15,7 +15,7 @@ def Create_World():
     pyrosim.Send_Cube(name="Box", pos=[x-3,y+3,z] , size=[length, width, height])
     pyrosim.End()
     
-def Create_Robot():
+def Generate_Body():
     pyrosim.Start_URDF("body.urdf")
     pyrosim.Send_Cube(name="Torso", pos=[x,y,z+1] , size=[length, width, height])
     pyrosim.Send_Joint( name = "Torso_Backleg" , parent= "Torso" , child = "Backleg" , type = "revolute", position = [-.5,0,1])
@@ -23,5 +23,19 @@ def Create_Robot():
     pyrosim.Send_Joint( name = "Torso_Frontleg" , parent= "Torso" , child = "Frontleg" , type = "revolute", position = [.5,0,1])
     pyrosim.Send_Cube(name="Frontleg", pos=[x+.5,y,z-1] , size=[length, width, height])
     pyrosim.End()
+
+def Generate_Brain():
+    pyrosim.Start_NeuralNetwork("brain.nndf")
+    pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
+    pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "Backleg")
+    pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "Frontleg")
+    pyrosim.Send_Motor_Neuron( name = 3 , jointName = "Torso_Backleg")
+    pyrosim.Send_Motor_Neuron( name = 4 , jointName = "Torso_Frontleg")
+    pyrosim.End()
+
+def Create_Robot():
+    pass
+Generate_Body()
+Generate_Brain()
 Create_Robot()
 Create_World()

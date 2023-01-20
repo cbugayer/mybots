@@ -14,5 +14,5 @@ class SENSOR:
 
     def Save_Values(self):
         np.save(file = "data/sens_dat.npy", arr = self.values)
-        #np.save(file = "data/sensordatafront.npy", arr = frontLegSensorValues)
+        
         
