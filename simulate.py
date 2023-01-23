@@ -8,5 +8,7 @@ import time as time
 import constants as c
 from simulation import SIMULATION 
 
-simulation = SIMULATION()
-simulation.Run()
+def fun_s():
+    simulation = SIMULATION()
+
+    simulation.Run()
