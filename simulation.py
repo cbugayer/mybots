@@ -14,7 +14,7 @@ class SIMULATION:
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0,0,c.gravity)  
         self.robot = ROBOT()   
-        self.world = WORLD()
+        self.world = WORLD(self.physicsClient)
         pyrosim.Prepare_To_Simulate(self.robot.RobotId)
         
 
@@ -25,6 +25,9 @@ class SIMULATION:
             self.robot.Sense(i)
             self.robot.Think()
             self.robot.Act()
+    
+    def Get_Fitness(self):
+        self.robot.Get_Fitness()
 
     def __del__(self):
 

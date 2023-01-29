@@ -17,13 +17,8 @@ class SOLUTION:
         self.z = .5  
     
     def Evaluate(self):
-
-        simulate.fun_s()
-        self.Create_World()
-        self.Create_Body()
-        self.Create_Brain()
+        os.system("python3 simulate.py")
         
-
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
         pyrosim.Send_Cube(name="Box", pos=[self.x-3,self.y+3,self.z] , size=[self.length, self.width, self.height])
