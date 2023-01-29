@@ -17,6 +17,9 @@ class SOLUTION:
         self.z = .5  
     
     def Evaluate(self):
+        self.Create_World()
+        self.Create_Body
+        self.Create_Brain()
         os.system("python3 simulate.py")
         
     def Create_World(self):
