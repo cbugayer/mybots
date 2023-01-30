@@ -7,7 +7,14 @@ import random
 import time as time
 import constants as c
 from simulation import SIMULATION
+import sys
 
-simulation = SIMULATION()
+# def fun_s():
+#     simulation = SIMULATION()
+#     simulation.Run()
+#     simulation.Get_Fitness()
+# fun_s()
+directOrGUI = sys.argv[1]
+simulation = SIMULATION(directOrGUI)
 simulation.Run()
 simulation.Get_Fitness()

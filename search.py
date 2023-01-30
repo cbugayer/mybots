@@ -8,6 +8,7 @@ from hillclimber import HILL_CLIMBER
 
 hc = HILL_CLIMBER()
 hc.Evolve()
+hc.Show_Best()
 
 # for _ in range(5):
 #     generate.fun_g()

@@ -8,9 +8,14 @@ import time
 
 class SIMULATION:
 
-    def __init__(self):
+    def __init__(self, directOrGUI):
 
-        self.physicsClient = p.connect(p.GUI)
+        if directOrGUI == 'DIRECT':
+            p.connect(p.DIRECT)
+        else:
+            p.connect(p.GUI)
+
+        self.physicsClient = p.connect(p.DIRECT)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0,0,c.gravity)  
         self.robot = ROBOT()   

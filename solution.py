@@ -17,11 +17,14 @@ class SOLUTION:
         self.y = 0 
         self.z = .5  
     
-    def Evaluate(self):
+    def Evaluate(self, directOrGUI):
+        os.system("python simulate.py "+directOrGUI) 
         self.Create_World()
-        self.Create_Body
+        self.Create_Body()
         self.Create_Brain()
-        os.system("python3 simulate.py")
+        #simulate.fun_s()
+        #pyrosim.End()
+        
         f = open("fitness.txt", "r")
         self.fitness = float(f.read())
         f.close()
@@ -50,8 +53,11 @@ class SOLUTION:
         for currentRow in range(3):
             for currentColumn in range(2):
                 pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumn+3 , weight = self.weights[currentRow][currentColumn] )
+        pyrosim.End()
 
     def Mutate(self):
+        #print(self.weights)
         randRow = random.randint(0,2)
         randColumn = random.randint(0,1)
-        self.weights[randRow,randColumn] = random.random() * 2 - 1
+        self.weights[randRow][randColumn] = random.random() * 2 - 1
+        #print(self.weights)
