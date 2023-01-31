@@ -1,12 +1,12 @@
 import numpy
 import pyrosim.pyrosim as pyrosim
-import simulate
 import os
 import random
+import time
 
 class SOLUTION:
 
-    def __init__(self):
+    def __init__(self, AvailableID):
 
         self.weights = numpy.random.rand(3,2)
         self.weights = self.weights * 2 - 1
@@ -16,17 +16,26 @@ class SOLUTION:
         self.x = 0
         self.y = 0 
         self.z = .5  
+
+        self.myID = AvailableID
     
     def Evaluate(self, directOrGUI):
-        os.system("python simulate.py "+directOrGUI) 
+        # print("FJN J NFOK FNKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
+        # print("start /B python3 simulate.py " + directOrGUI +" " + str(self.myID))
+        
         self.Create_World()
         self.Create_Body()
         self.Create_Brain()
+        s = str(self.myID)
+        os.system("start /B "" python simulate.py " + directOrGUI +" " + s)
         #simulate.fun_s()
         #pyrosim.End()
-        
-        f = open("fitness.txt", "r")
+        filename = "fitness" + str(self.myID) + ".txt"
+        f = open(filename, "r")
+        while not os.path.exists(filename):
+            time.sleep(0.05)
         self.fitness = float(f.read())
+        print(self.fitness)
         f.close()
         
     def Create_World(self):
@@ -44,7 +53,10 @@ class SOLUTION:
         pyrosim.End()
 
     def Create_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+        s = str(self.myID)
+        f = open("brain" + s + ".nndf", "w")
+        f.close()
+        pyrosim.Start_NeuralNetwork("brain" + s + ".nndf")
         pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
         pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "Backleg")
         pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "Frontleg")
@@ -61,3 +73,27 @@ class SOLUTION:
         randColumn = random.randint(0,1)
         self.weights[randRow][randColumn] = random.random() * 2 - 1
         #print(self.weights)
+
+    def Set_ID(self, id):
+        
+        self.myID = id
+    
+    def Start_Simulation(self, directOrGUI):
+        while not os.path.exists("world.sdf"):
+            time.sleep(0.01)
+        while not os.path.exists("body.urdf"):
+            time.sleep(0.01)
+        self.Create_World()
+        self.Create_Body()
+        self.Create_Brain()
+        os.system("start /B python simulate.py " + directOrGUI +" " + str(self.myID))
+
+    def Wait_For_Simulation_To_End(self):
+        filename = "fitness" + str(self.myID) + ".txt"
+        while not os.path.exists(filename):
+            time.sleep(0.01)
+        f = open(filename, "r")
+        self.fitness = float(f.read())
+        print(self.fitness)
+        f.close()
+        os.system("del fitness"+str(self.myID)+".txt")

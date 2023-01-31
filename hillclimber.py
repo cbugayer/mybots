@@ -29,7 +29,7 @@ class HILL_CLIMBER:
     def Spawn(self):
         
         self.child = copy.deepcopy(self.parent)
-
+    
     def Mutate(self):
 
         self.child.Mutate()

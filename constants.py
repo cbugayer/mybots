@@ -19,3 +19,5 @@ target_angles = 2*np.pi
 time_sleep = 1/60
 
 numberOfGenerations = 10
+
+populationSize = 10
