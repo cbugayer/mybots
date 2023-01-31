@@ -21,10 +21,10 @@ class HILL_CLIMBER:
         self.Mutate()
 
         self.child.Evaluate("DIRECT")
-        
-        self.Select()
-        
+
         self.Print()
+        
+        self.Select()     
 
     def Spawn(self):
         
