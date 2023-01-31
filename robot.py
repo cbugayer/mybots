@@ -7,6 +7,7 @@ from motor import MOTOR
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
 import time
+from pathlib import Path
 
 class ROBOT:
 
@@ -15,8 +16,13 @@ class ROBOT:
         self.solutionID = solutionID
         # while not os.path.exists("brain"+str(self.solutionID)+".nndf"):
         #     time.sleep(1/100)
+        myfile = Path("body.urdf")
         
-        self.RobotId = p.loadURDF("body.urdf")
+        while not os.path.exists("body.urdf"):
+            time.sleep(0.01)
+        if myfile.is_file() and myfile.exists():
+            self.RobotId = p.loadURDF("body.urdf")
+
         pyrosim.Prepare_To_Simulate(self.RobotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()

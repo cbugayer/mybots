@@ -92,6 +92,7 @@ class SOLUTION:
         filename = "fitness" + str(self.myID) + ".txt"
         while not os.path.exists(filename):
             time.sleep(0.01)
+        assert os.path.isfile(filename)
         f = open(filename, "r")
         self.fitness = float(f.read())
         print(self.fitness)

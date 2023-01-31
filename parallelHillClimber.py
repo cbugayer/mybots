@@ -67,7 +67,9 @@ class PARALLEL_HILL_CLIMBER:
         fit = {}
         for p in self.parents.values():
             fit[p] = p.fitness
-        top = max(fit, key=fit.get) 
+        print(fit)
+        top = min(fit, key=fit.get)
+        print(top.fitness)
         top.Start_Simulation("GUI")
         
 
