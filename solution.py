@@ -19,24 +19,24 @@ class SOLUTION:
 
         self.myID = AvailableID
     
-    def Evaluate(self, directOrGUI):
-        # print("FJN J NFOK FNKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
-        # print("start /B python3 simulate.py " + directOrGUI +" " + str(self.myID))
+    # def Evaluate(self, directOrGUI):
+    #     # print("FJN J NFOK FNKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
+    #     # print("start /B python3 simulate.py " + directOrGUI +" " + str(self.myID))
         
-        self.Create_World()
-        self.Create_Body()
-        self.Create_Brain()
-        s = str(self.myID)
-        os.system("start /B "" python simulate.py " + directOrGUI +" " + s)
-        #simulate.fun_s()
-        #pyrosim.End()
-        filename = "fitness" + str(self.myID) + ".txt"
-        f = open(filename, "r")
-        while not os.path.exists(filename):
-            time.sleep(0.05)
-        self.fitness = float(f.read())
-        print(self.fitness)
-        f.close()
+    #     self.Create_World()
+    #     self.Create_Body()
+    #     self.Create_Brain()
+    #     s = str(self.myID)
+    #     os.system("start /B "" python simulate.py " + directOrGUI +" " + s)
+    #     #simulate.fun_s()
+    #     #pyrosim.End()
+    #     filename = "fitness" + str(self.myID) + ".txt"
+    #     f = open(filename, "r")
+    #     while not os.path.exists(filename):
+    #         time.sleep(0.05)
+    #     self.fitness = float(f.read())
+    #     print(self.fitness)
+    #     f.close()
         
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
