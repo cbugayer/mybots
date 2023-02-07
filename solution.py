@@ -11,42 +11,28 @@ class SOLUTION:
 
         self.weights = numpy.random.rand(c.numSensorNeurons,c.numMotorNeurons)
         self.weights = self.weights * 2 - 1
-        self.length = 1
-        self.width = 1
-        self.height = 1
-        self.x = 0
-        self.y = 0 
-        self.z = .5  
 
         self.myID = AvailableID
-    
-    # def Evaluate(self, directOrGUI):
-    #     # print("FJN J NFOK FNKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
-    #     # print("start /B python3 simulate.py " + directOrGUI +" " + str(self.myID))
-        
-    #     self.Create_World()
-    #     self.Create_Body()
-    #     self.Create_Brain()
-    #     s = str(self.myID)
-    #     os.system("start /B "" python simulate.py " + directOrGUI +" " + s)
-    #     #simulate.fun_s()
-    #     #pyrosim.End()
-    #     filename = "fitness" + str(self.myID) + ".txt"
-    #     f = open(filename, "r")
-    #     while not os.path.exists(filename):
-    #         time.sleep(0.05)
-    #     self.fitness = float(f.read())
-    #     print(self.fitness)
-    #     f.close()
         
     def Create_World(self):
-        pyrosim.Start_SDF("world.sdf")
-        pyrosim.Send_Cube(name="Box", pos=[self.x-3,self.y+3,self.z] , size=[self.length, self.width, self.height])
+        s = str(self.myID)
+        f = open("world" + s + ".sdf", "w")
+        f.close()
+        pyrosim.Start_SDF("world" + str(self.myID) + ".sdf")
+        pyrosim.Send_Sphere(name="Ball", pos=[-1,1,2.5], size=[0.5], mass=0.1)
+        pyrosim.Send_Cube(name="Pole", pos=[-1,1,1] , size=[0.2,0.2,2], mass=100)
+        pyrosim.Send_Cube(name="Support1", pos=[-1.1,0.8,0.25] , size=[0.4,0.2,0.5], mass=100)
+        pyrosim.Send_Cube(name="Support2", pos=[-1.2,1.1,0.25] , size=[0.2,0.4,0.5], mass=100)
+        pyrosim.Send_Cube(name="Support3", pos=[-0.9,1.2,0.25] , size=[0.4,0.2,0.5], mass=100)
+        pyrosim.Send_Cube(name="Support4", pos=[-0.8,0.9,0.25] , size=[0.2,0.4,0.5], mass=100)
         pyrosim.End()
         
     def Create_Body(self):
-        pyrosim.Start_URDF("body.urdf")
-        pyrosim.Send_Cube(name="Torso", pos=[0,0,1] , size=[self.length, self.width, self.height])
+        s = str(self.myID)
+        f = open("body" + s + ".urdf", "w")
+        f.close()
+        pyrosim.Start_URDF("body"+str(self.myID)+".urdf")
+        pyrosim.Send_Cube(name="Torso", pos=[0,0,1] , size=[1,1,1])
         pyrosim.Send_Joint( name = "Torso_Backleg" , parent= "Torso" , child = "Backleg" , type = "revolute", position = [0,-0.5,1], jointAxis = "1 0 0")
         pyrosim.Send_Cube(name="Backleg", pos=[0,-0.5,0] , size=[0.2,1,0.2])
         pyrosim.Send_Joint( name = "Torso_Frontleg" , parent= "Torso" , child = "Frontleg" , type = "revolute", position = [0,0.5,1], jointAxis = "1 0 0")
@@ -63,6 +49,13 @@ class SOLUTION:
         pyrosim.Send_Cube(name="Rightlowerleg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
         pyrosim.Send_Joint( name = "Leftleg_Leftlowerleg" , parent= "Leftleg" , child = "Leftlowerleg" , type = "revolute", position = [-1,0,0], jointAxis = "0 1 0")
         pyrosim.Send_Cube(name="Leftlowerleg", pos=[0,0,-0.5] , size=[0.2,0.2,1])
+
+        pyrosim.Send_Joint( name = "Torso_Body" , parent= "Torso" , child = "Body" , type = "revolute", position = [0,0,1.5], jointAxis = "0 0 1")
+        pyrosim.Send_Cube(name="Body", pos=[0,0,0.5], size=[1,1,1])
+        pyrosim.Send_Joint( name = "Body_Bat1" , parent= "Body" , child = "Bat1" , type = "revolute", position = [-0.5,0,0.5], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="Bat1", pos=[-0.5,0,0] , size=[1,0.2,0.2], mass=10)
+        pyrosim.Send_Joint( name = "Body_Bat2" , parent= "Body" , child = "Bat2" , type = "revolute", position = [0.5,0,0.5], jointAxis = "1 0 0")
+        pyrosim.Send_Cube(name="Bat2", pos=[0.5,0,0] , size=[1,0.2,0.2], mass=10)
         pyrosim.End()
 
     def Create_Brain(self):
@@ -79,14 +72,20 @@ class SOLUTION:
         pyrosim.Send_Sensor_Neuron(name = 6 , linkName = "Frontlowerleg")
         pyrosim.Send_Sensor_Neuron(name = 7 , linkName = "Rightlowerleg")
         pyrosim.Send_Sensor_Neuron(name = 8 , linkName = "Leftlowerleg")
-        pyrosim.Send_Motor_Neuron( name = 9 , jointName = "Torso_Backleg")
-        pyrosim.Send_Motor_Neuron( name = 10 , jointName = "Torso_Frontleg")
-        pyrosim.Send_Motor_Neuron( name = 11 , jointName = "Torso_Rightleg")
-        pyrosim.Send_Motor_Neuron( name = 12 , jointName = "Torso_Leftleg")
-        pyrosim.Send_Motor_Neuron( name = 13 , jointName = "Backleg_Backlowerleg")
-        pyrosim.Send_Motor_Neuron( name = 14 , jointName = "Frontleg_Frontlowerleg")
-        pyrosim.Send_Motor_Neuron( name = 15 , jointName = "Rightleg_Rightlowerleg")
-        pyrosim.Send_Motor_Neuron( name = 16 , jointName = "Leftleg_Leftlowerleg")
+        pyrosim.Send_Sensor_Neuron(name = 9 , linkName = "Body")
+        pyrosim.Send_Sensor_Neuron(name = 10 , linkName = "Bat1")
+        pyrosim.Send_Sensor_Neuron(name = 11 , linkName = "Bat2")
+        pyrosim.Send_Motor_Neuron( name = 12 , jointName = "Torso_Backleg")
+        pyrosim.Send_Motor_Neuron( name = 13 , jointName = "Torso_Frontleg")
+        pyrosim.Send_Motor_Neuron( name = 14 , jointName = "Torso_Rightleg")
+        pyrosim.Send_Motor_Neuron( name = 15 , jointName = "Torso_Leftleg")
+        pyrosim.Send_Motor_Neuron( name = 16 , jointName = "Backleg_Backlowerleg")
+        pyrosim.Send_Motor_Neuron( name = 17 , jointName = "Frontleg_Frontlowerleg")
+        pyrosim.Send_Motor_Neuron( name = 18 , jointName = "Rightleg_Rightlowerleg")
+        pyrosim.Send_Motor_Neuron( name = 19 , jointName = "Leftleg_Leftlowerleg")
+        pyrosim.Send_Motor_Neuron( name = 20 , jointName = "Torso_Body")
+        pyrosim.Send_Motor_Neuron( name = 21 , jointName = "Body_Bat1")
+        pyrosim.Send_Motor_Neuron( name = 22 , jointName = "Body_Bat2")
         for currentRow in range(c.numSensorNeurons):
             for currentColumn in range(c.numMotorNeurons):
                 pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumn] )
@@ -104,10 +103,10 @@ class SOLUTION:
         self.myID = id
     
     def Start_Simulation(self, directOrGUI):
-        while not os.path.exists("world.sdf"):
-            time.sleep(0.01)
-        while not os.path.exists("body.urdf"):
-            time.sleep(0.01)
+        # while not os.path.exists("world" + str(self.myID) + ".sdf"):
+        #     time.sleep(0.01)
+        # while not os.path.exists("body.urdf"):
+        #     time.sleep(0.01)
         self.Create_World()
         self.Create_Body()
         self.Create_Brain()

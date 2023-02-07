@@ -16,18 +16,18 @@ class ROBOT:
         self.solutionID = solutionID
         # while not os.path.exists("brain"+str(self.solutionID)+".nndf"):
         #     time.sleep(1/100)
-        myfile = Path("body.urdf")
+        myfile = Path("body"+str(self.solutionID)+".urdf")
         
-        while not os.path.exists("body.urdf"):
+        while not os.path.exists("body"+str(self.solutionID)+".urdf"):
             time.sleep(0.01)
         if myfile.is_file() and myfile.exists():
-            self.RobotId = p.loadURDF("body.urdf")
+            self.RobotId = p.loadURDF("body"+str(self.solutionID)+".urdf")
 
         pyrosim.Prepare_To_Simulate(self.RobotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
         self.nn = NEURAL_NETWORK("brain"+str(self.solutionID)+".nndf")
-        
+        os.system("del body"+str(self.solutionID)+".urdf")
         os.system("del brain"+str(self.solutionID)+".nndf")
 
     def Prepare_To_Sense(self):
@@ -55,15 +55,16 @@ class ROBOT:
         self.nn.Update()
         #self.nn.Print()
 
-    def Get_Fitness(self):
-        stateOfLinkZero = p.getLinkState(self.RobotId,0)
-        positionOfLinkZero = stateOfLinkZero[0]
-        xCoordinateOfLinkZero = positionOfLinkZero[0]
+    def Get_Fitness(self,topX,topY,topZ):
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.RobotId)
+        basePosition = basePositionAndOrientation[0]
+        xPosition = basePosition[0]
+        fitness = -topX * topY * topZ
         #f = open("fitness"+str(self.solutionID)+".txt", "w")
         f = open("tmp"+str(self.solutionID)+".txt", "w")
         
         #
-        f.write(str(xCoordinateOfLinkZero))
+        f.write(str(fitness))
         f.close()
         #os.system("rename tmp" + str(self.solutionID)+ ".txt" "fitness" + str(self.solutionID) + ".txt")
         os.rename("tmp" + str(self.solutionID)+ ".txt", "fitness" + str(self.solutionID) + ".txt")

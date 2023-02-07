@@ -9,6 +9,8 @@ class PARALLEL_HILL_CLIMBER:
 
         os.system("del brain*.nndf")
         os.system("del fitness*.txt")
+        os.system("del world*.sdf")
+        os.system("del body*.urdf")
         self.parents = {}
         self.nextAvailableID = 0
         for i in range(c.populationSize):
@@ -54,7 +56,7 @@ class PARALLEL_HILL_CLIMBER:
 
     def Select(self):
         for p in self.parents.keys():
-            if self.parents[p].fitness > self.children[p].fitness:
+            if self.parents[p].fitness < self.children[p].fitness:
                 self.parents[p] = self.children[p]
 
     def Print(self):
@@ -68,7 +70,7 @@ class PARALLEL_HILL_CLIMBER:
         for p in self.parents.values():
             fit[p] = p.fitness
         print(fit)
-        top = min(fit, key=fit.get)
+        top = max(fit, key=fit.get)
         print(top.fitness)
         top.Start_Simulation("GUI")
         
