@@ -18,12 +18,12 @@ target_angles = 2*np.pi
 
 time_sleep = 1/60
 
-numberOfGenerations = 20
+numberOfGenerations = 1
 
-populationSize = 10
+populationSize = 1
 
-numSensorNeurons = 12
+numSensorNeurons = 1
 
-numMotorNeurons = 11
+numMotorNeurons = 1
 
 motorJointRange = 0.2
