@@ -10,10 +10,15 @@ class SOLUTION:
     def __init__(self, AvailableID):
         
         self.num_links = random.randint(2,40)
-        self.rand_links = numpy.random.randint(0, self.num_links, random.randint(0, self.num_links - 1))
+        self.num_linksX = random.randint(2,40)
+        self.rand_links = []
+        for _ in range(0, random.randint(1,self.num_links * self.num_linksX)):
+            self.rand_links.append((random.randint(0,self.num_linksX),random.randint(0,self.num_links)))
         self.weights = numpy.random.rand(self.num_links - 1,self.num_links - 1)
         self.weights = self.weights * 2 - 1
         self.Ys = {}
+        self.Xs = {}
+        
         self.myID = AvailableID
         
     def Create_World(self):
@@ -21,19 +26,25 @@ class SOLUTION:
         f = open("world" + s + ".sdf", "w")
         f.close()
         pyrosim.Start_SDF("world" + str(self.myID) + ".sdf")
-        pyrosim.Send_Sphere(name="Ball", pos=[-1,1,2.5], size=[0.5], mass=0.1)
-        pyrosim.Send_Cube(name="Pole", pos=[-1,1,1] , size=[0.2,0.2,2], mass=100)
-        pyrosim.Send_Cube(name="Support1", pos=[-1.1,0.8,0.25] , size=[0.4,0.2,0.5], mass=100)
-        pyrosim.Send_Cube(name="Support2", pos=[-1.2,1.1,0.25] , size=[0.2,0.4,0.5], mass=100)
-        pyrosim.Send_Cube(name="Support3", pos=[-0.9,1.2,0.25] , size=[0.4,0.2,0.5], mass=100)
-        pyrosim.Send_Cube(name="Support4", pos=[-0.8,0.9,0.25] , size=[0.2,0.4,0.5], mass=100)
+        # pyrosim.Send_Sphere(name="Ball", pos=[-1,1,2.5], size=[0.5], mass=0.1)
+        # pyrosim.Send_Cube(name="Pole", pos=[-1,1,1] , size=[0.2,0.2,2], mass=100)
+        # pyrosim.Send_Cube(name="Support1", pos=[-1.1,0.8,0.25] , size=[0.4,0.2,0.5], mass=100)
+        # pyrosim.Send_Cube(name="Support2", pos=[-1.2,1.1,0.25] , size=[0.2,0.4,0.5], mass=100)
+        # pyrosim.Send_Cube(name="Support3", pos=[-0.9,1.2,0.25] , size=[0.4,0.2,0.5], mass=100)
+        # pyrosim.Send_Cube(name="Support4", pos=[-0.8,0.9,0.25] , size=[0.2,0.4,0.5], mass=100)
         pyrosim.End()
         
     def Create_Random_Ys(self):
         
-        for i in range(self.num_links):
-            self.Ys[i] = random.random()
+        for i in range(self.num_linksX):
+            for j in range(self.num_links):
+                self.Ys[(i, j)] = random.random()
+
+    def Create_Random_Xs(self):
         
+        for i in range(self.num_linksX):
+            for j in range(self.num_links):
+                self.Xs[(i,j)] = random.random()    
 
 
     def Create_Body(self):
@@ -41,16 +52,63 @@ class SOLUTION:
         f = open("body" + s + ".urdf", "w")
         f.close()
         pyrosim.Start_URDF("body"+str(self.myID)+".urdf")
-        pyrosim.Send_Cube(name="Link0", pos=[0,0,0.5] , size=[random.random(),self.Ys[0],random.random()])
-        pyrosim.Send_Joint( name = "Link0_Link1", parent= "Link0" , child = "Link1", type = "revolute", position = [0,self.Ys[0]/2,0.5], jointAxis = "0 0 1")
-        for i in range(1,self.num_links):
-            if i in self.rand_links:
-                pyrosim.Send_Cube(name="Link"+str(i), pos=[0,self.Ys[i]/2,0] , size=[random.random(),self.Ys[i],random.random()], color = "green")
+        pyrosim.Send_Cube(name="Link(0,0)", pos=[0,0,0.5] , size=[self.Xs[(0,0)],self.Ys[(0,0)],random.random()])
+        pyrosim.Send_Joint( name = "Link(0,0)_Link(0,1)", parent= "Link(0,0)" , child = "Link(0,1)", type = "revolute", position = [0,self.Ys[(0,0)]/2,0], jointAxis = "0 0 1")
+        pyrosim.Send_Joint( name = "Link(0,0)_Link(1,0)", parent= "Link(0,0)" , child = "Link(1,0)", type = "revolute", position = [self.Xs[(0,0)]/2,-self.Ys[(0,0)]/2,0], jointAxis = "0 0 1")
+        for j in range(0,self.num_links):
+            if j % 2 == 0:
+                if j != 0:
+                    if (0,j) in self.rand_links:
+                        pyrosim.Send_Cube(name="Link(0,"+str(j)+")", pos=[0,self.Ys[(0,j)]/2,0] , size=[self.Xs[(0,j)],self.Ys[(0,j)],random.random()], color = "green")
+                    else:
+                        pyrosim.Send_Cube(name="Link(0,"+str(j)+")", pos=[0,self.Ys[(0,j)]/2,0] , size=[self.Xs[(0,j)],self.Ys[(0,j)],random.random()])
+                    if j != self.num_links - 1:
+                        pyrosim.Send_Joint( name = "Link(0,"+str(j)+")_Link(0,"+str(j+1)+")" , parent= "Link(0,"+str(j)+")" , child = "Link(0,"+str(j+1)+")" , type = "revolute", position = [0,self.Ys[(0,j)],0], jointAxis = "0 0 1")
+                        pyrosim.Send_Joint( name = "Link(0,"+str(j)+")_Link(1,"+str(j)+")" , parent= "Link(0,"+str(j)+")" , child = "Link(1,"+str(j)+")" , type = "revolute", position = [self.Xs[(0,j)]/2,-self.Ys[(0,j)]/2,0], jointAxis = "0 0 1")
+                    else:
+                        pyrosim.Send_Joint( name = "Link(0,"+str(j)+")_Link(1,"+str(j)+")" , parent= "Link(0,"+str(j)+")" , child = "Link(1,"+str(j)+")" , type = "revolute", position = [self.Xs[(0,j)]/2,self.Ys[(0,j)]/2,0], jointAxis = "0 0 1")
+                for i in range(1, self.num_linksX):
+                    if (i,j) in self.rand_links:
+                        pyrosim.Send_Cube(name="Link"+str((i,j)), pos=[self.Xs[(i,j)]/2,0,0] , size=[self.Xs[(i,j)],self.Ys[(i,j)],random.random()], color = "green")
+                    else:
+                        pyrosim.Send_Cube(name="Link"+str((i,j)), pos=[self.Xs[(i,j)]/2,0,0] , size=[self.Xs[(i,j)],self.Ys[(i,j)],random.random()])
+                    if j != self.num_links - 1:
+                        pyrosim.Send_Joint( name = "Link"+str((i,j))+"_Link"+str((i,j+1)) , parent= "Link"+str((i,j)) , child = "Link"+str((i,j+1)) , type = "revolute", position = [self.Xs[(i,j)]/2,self.Ys[(i,j)]/2,0], jointAxis = "0 0 1")
+                        if i != self.num_linksX - 1:
+                            pyrosim.Send_Joint( name = "Link"+str((i,j))+"_Link"+str((i+1,j)) , parent= "Link"+str((i,j)) , child = "Link"+str((i+1,j)) , type = "revolute", position = [self.Xs[(i,j)]/2,-self.Ys[(i,j)]/2,0], jointAxis = "0 0 1")
+                    else:
+                        if i != self.num_linksX - 1:
+                            pyrosim.Send_Joint( name = "Link"+str((i,j))+"_Link"+str((i+1,j)) , parent= "Link"+str((i,j)) , child = "Link"+str((i+1,j)) , type = "revolute", position = [self.Xs[(i,j)],0,0], jointAxis = "0 0 1")
             else:
-                pyrosim.Send_Cube(name="Link"+str(i), pos=[0,self.Ys[i]/2,0] , size=[random.random(),self.Ys[i],random.random()])
-            if i != self.num_links - 1:
-                pyrosim.Send_Joint( name = "Link"+str(i)+"_Link"+str(i+1) , parent= "Link"+str(i) , child = "Link"+str(i+1) , type = "revolute", position = [0,self.Ys[i],0], jointAxis = "0 0 1")
-        
+                if (self.num_linksX - 1,j) in self.rand_links:
+                    pyrosim.Send_Cube(name="Link"+str((self.num_linksX - 1, j)), pos=[0,self.Ys[(self.num_linksX - 1,j)]/2,0] , size=[self.Xs[(self.num_linksX - 1,j)],self.Ys[(self.num_linksX - 1,j)],random.random()], color = "green")
+                else:
+                    pyrosim.Send_Cube(name="Link"+str((self.num_linksX - 1, j)), pos=[0,self.Ys[(self.num_linksX - 1,j)]/2,0] , size=[self.Xs[(self.num_linksX - 1,j)],self.Ys[(self.num_linksX - 1,j)],random.random()])
+                if j != self.num_links - 1:
+                    pyrosim.Send_Joint( name = "Link"+str((self.num_linksX - 1, j))+"_Link"+str((self.num_linksX - 1, j+1)) , parent= "Link"+str((self.num_linksX - 1, j)) , child = "Link"+str((self.num_linksX - 1, j+1)) , type = "revolute", position = [0,self.Ys[(self.num_linksX - 1,j)],0], jointAxis = "0 0 1")
+                    pyrosim.Send_Joint( name = "Link"+str((self.num_linksX - 1, j))+"_Link"+str((self.num_linksX - 2, j)) , parent= "Link"+str((self.num_linksX - 1, j)) , child = "Link"+str((self.num_linksX - 2, j)) , type = "revolute", position = [-self.Xs[(self.num_linksX - 1,j)]/2,-self.Ys[(self.num_linksX - 1,j)]/2,0], jointAxis = "0 0 1")
+                else:
+                    pyrosim.Send_Joint( name = "Link"+str((self.num_linksX - 1, j))+"_Link"+str((self.num_linksX - 2, j)) , parent= "Link"+str((self.num_linksX - 1, j)) , child = "Link"+str((self.num_linksX - 2, j)) , type = "revolute", position = [-self.Xs[(self.num_linksX - 1,j)]/2,self.Ys[(self.num_linksX - 1,j)]/2,0], jointAxis = "0 0 1")
+                for i in range(self.num_linksX - 2, -1, -1):
+                    if (i,j) in self.rand_links:
+                        pyrosim.Send_Cube(name="Link"+str((i,j)), pos=[-self.Xs[(i,j)]/2,0,0] , size=[self.Xs[(i,j)],self.Ys[(i,j)],random.random()], color = "green")
+                    else:
+                        pyrosim.Send_Cube(name="Link"+str((i,j)), pos=[-self.Xs[(i,j)]/2,0,0] , size=[self.Xs[(i,j)],self.Ys[(i,j)],random.random()])
+                    if j != self.num_links - 1:
+                        pyrosim.Send_Joint( name = "Link"+str((i,j))+"_Link"+str((i,j+1)) , parent= "Link"+str((i,j)) , child = "Link"+str((i,j+1)) , type = "revolute", position = [-self.Xs[(i,j)]/2,self.Ys[(i,j)]/2,0], jointAxis = "0 0 1")
+                        if i != 0:
+                            pyrosim.Send_Joint( name = "Link"+str((i,j))+"_Link"+str((i-1,j)) , parent= "Link"+str((i,j)) , child = "Link"+str((i-1,j)) , type = "revolute", position = [-self.Xs[(i,j)]/2,-self.Ys[(i,j)]/2,0], jointAxis = "0 0 1")
+                    else:
+                        if i != 0:
+                            pyrosim.Send_Joint( name = "Link"+str((i,j))+"_Link"+str((i+1,j)) , parent= "Link"+str((i,j)) , child = "Link"+str((i+1,j)) , type = "revolute", position = [-self.Xs[(i,j)],0,0], jointAxis = "0 0 1")
+
+        # count = 1
+        # for i in range(self.num_linksX + self.num_links - 2, -1, self.num_links):
+        #     pyrosim.Send_Cube(name="Link"+str(i), pos=[self.Xs[(i-count)],self.Ys[i-count],0] , size=[self.Xs[i-count]/2+self.Xs[i],self.Ys[i],random.random()])
+        #     count += 1
+            
+
+
         pyrosim.End()
 
     def Create_Brain(self):
@@ -86,8 +144,9 @@ class SOLUTION:
         #     time.sleep(0.01)
         self.Create_World()
         self.Create_Random_Ys()
+        self.Create_Random_Xs()
         self.Create_Body()
-        self.Create_Brain()
+        #self.Create_Brain()
         os.system("start /B python simulate.py " + directOrGUI +" " + str(self.myID))
 
     def Wait_For_Simulation_To_End(self):

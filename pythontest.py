@@ -1,5 +1,12 @@
 import numpy as np
 import random
-s = np.random.randint(0, 20, random.randint(0, 20))
-t = random.randint(0, 20)
-print(s)
+# s = np.random.randint(0, 20, random.randint(0, 20))
+# t = random.randint(0, 20)
+s = np.random.randint(0, 5, random.randint(0, 5 - 1))
+t = [tuple(x) for x in np.random.randint(0, 5, size=(random.randint(0, 15), 2))]
+lst = []
+for i in range(0, random.randint(1,18)):
+    lst.append((random.randint(-10,0),random.randint(0, 6)))
+
+# print(t)
+print(lst)
