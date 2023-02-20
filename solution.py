@@ -53,7 +53,7 @@ class SOLUTION:
         f.close()
         pyrosim.Start_URDF("body"+str(self.myID)+".urdf")
         pyrosim.Send_Cube(name="Link(0,0)", pos=[0,0,0.5] , size=[self.Xs[(0,0)],self.Ys[(0,0)],random.random()])
-        pyrosim.Send_Joint( name = "Link(0,0)_Link(0,1)", parent= "Link(0,0)" , child = "Link(0,1)", type = "revolute", position = [0,self.Ys[(0,0)]/2,0], jointAxis = "0 0 1")
+        pyrosim.Send_Joint( name = "Link(0,0)_Link(0,1)", parent= "Link(0,0)" , child = "Link(0,1)", type = "revolute", position = [0,self.Ys[(0,0)]/2,0.5], jointAxis = "0 0 1")
         pyrosim.Send_Joint( name = "Link(0,0)_Link(1,0)", parent= "Link(0,0)" , child = "Link(1,0)", type = "revolute", position = [self.Xs[(0,0)]/2,-self.Ys[(0,0)]/2,0], jointAxis = "0 0 1")
         for j in range(0,self.num_links):
             if j % 2 == 0:
