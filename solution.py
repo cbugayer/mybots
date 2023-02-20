@@ -116,14 +116,14 @@ class SOLUTION:
         f = open("brain" + s + ".nndf", "w")
         f.close()
         pyrosim.Start_NeuralNetwork("brain" + s + ".nndf")
-        for i in range(self.num_links - 1):
-            pyrosim.Send_Motor_Neuron(name = i , jointName = "Link"+str(i)+"_Link"+str(i+1)) 
-        for ind, rand_num in enumerate(self.rand_links):
-            pyrosim.Send_Sensor_Neuron(name =  self.num_links - 1 + ind, linkName = "Link"+str(rand_num))
+        # for i in range(self.num_links - 1):
+        #     pyrosim.Send_Motor_Neuron(name = i , jointName = "Link"+str(i)+"_Link"+str(i+1)) 
+        # for ind, rand_num in enumerate(self.rand_links):
+        #     pyrosim.Send_Sensor_Neuron(name =  self.num_links - 1 + ind, linkName = "Link"+str(rand_num))
         
-        for currentRow in range(len(self.rand_links)):
-            for currentColumn in range(self.num_links - 1):
-                pyrosim.Send_Synapse( sourceNeuronName = currentRow+self.num_links - 1  , targetNeuronName = currentColumn, weight = self.weights[currentRow][currentColumn] )
+        # for currentRow in range(len(self.rand_links)):
+        #     for currentColumn in range(self.num_links - 1):
+        #         pyrosim.Send_Synapse( sourceNeuronName = currentRow+self.num_links - 1  , targetNeuronName = currentColumn, weight = self.weights[currentRow][currentColumn] )
         pyrosim.End()
 
     def Mutate(self):
@@ -146,7 +146,7 @@ class SOLUTION:
         self.Create_Random_Ys()
         self.Create_Random_Xs()
         self.Create_Body()
-        #self.Create_Brain()
+        self.Create_Brain()
         os.system("start /B python simulate.py " + directOrGUI +" " + str(self.myID))
 
     def Wait_For_Simulation_To_End(self):
