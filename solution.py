@@ -57,11 +57,38 @@ class SOLUTION:
         pyrosim.Start_URDF("body"+str(self.myID)+".urdf")
         pyrosim.Send_Cube(name="Link(0,0)", pos=[0,0,0.5] , size=[1,1,1], color='green')
         pyrosim.Send_Joint( name = "Link(0,0)_Link(0,1)", parent= "Link(0,0)" , child = "Link(0,1)", type = "revolute", position = [0,1/2,0.5], jointAxis = "0 0 1")
+        pyrosim.Send_Joint( name = "Link(0,0)_Link(1,0)", parent= "Link(0,0)" , child = "Link(1,0)", type = "revolute", position = [1/2,0,0.5], jointAxis = "0 0 1")
+        
+        #pyrosim.Send_Cube(name="Link(0,1)", pos=[0,1/2,0] , size=[1,1,1])
+        pyrosim.Send_Cube(name="Link(1,0)", pos=[1/2,0,0] , size=[1,1,1])
+        
+        # pyrosim.Send_Joint( name = "Link(1,0)_Link(1,1)", parent= "Link(1,0)" , child = "Link(1,1)", type = "revolute", position = [1/2,1/2,0], jointAxis = "0 0 1")
+        # pyrosim.Send_Cube(name="Link(1,1)", pos=[0,1/2,0] , size=[1,1,1])
+
+        # pyrosim.Send_Joint( name = "Link(1,1)_Link(0,1)", parent= "Link(1,1)" , child = "Link(0,1)", type = "revolute", position = [-1/2,1/2,0], jointAxis = "0 0 1")
         pyrosim.Send_Cube(name="Link(0,1)", pos=[0,1/2,0] , size=[1,1,1])
-        # pyrosim.Send_Joint( name = "Link(0,0)_Link(1,0)", parent= "Link(0,0)" , child = "Link(1,0)", type = "revolute", position = [1/2,-1/2,0], jointAxis = "0 0 1")
-        # pyrosim.Send_Cube(name="Link(1,0)", pos=[1/2,0,0] , size=[1,1,1])
         
+        # pyrosim.Send_Cube(name="Link(0,1)", pos=[-1/2,0,0] , size=[1,1,1])
         
+        pyrosim.Send_Joint( name = "Link(1,0)_Link(1,1)", parent= "Link(1,0)" , child = "Link(1,1)", type = "revolute", position = [1/2,1/2,0], jointAxis = "0 0 1")
+        pyrosim.Send_Joint( name = "Link(1,0)_Link(2,0)", parent= "Link(1,0)" , child = "Link(2,0)", type = "revolute", position = [1,0,0], jointAxis = "0 0 1")
+
+        pyrosim.Send_Cube(name="Link(2,0)", pos=[1/2,0,0] , size=[1,1,1])
+        pyrosim.Send_Cube(name="Link(1,1)", pos=[0,1/2,0] , size=[1,1,1])
+        # Because i = 3 - 1, we only need one joint and one cube
+        pyrosim.Send_Joint( name = "Link(2,0)_Link(2,1)", parent= "Link(2,0)" , child = "Link(2,1)", type = "revolute", position = [1/2,1/2,0], jointAxis = "0 0 1")
+
+        pyrosim.Send_Cube(name="Link(2,1)", pos=[0,1/2,0] , size=[1,1,1])
+
+        pyrosim.Send_Joint( name = "Link(2,1)_Link(2,2)", parent= "Link(2,1)" , child = "Link(3,0)", type = "revolute", position = [0,1,0], jointAxis = "0 0 1")
+        pyrosim.Send_Joint( name = "Link(2,1)_Link(1,1)", parent= "Link(2,1)" , child = "Link(1,1)", type = "revolute", position = [-1/2,1/2,0], jointAxis = "0 0 1")
+       
+        # pyrosim.Send_Cube(name="Link(2,2)", pos=[0,1/2,0] , size=[1,1,1])
+        
+        # pyrosim.Send_Joint( name = "Link(2,1)_Link(1,1)", parent= "Link(2,1)" , child = "Link(1,1)", type = "revolute", position = [-1/2,1/2,0], jointAxis = "0 0 1")
+                           
+
+       
         # pyrosim.Send_Cube(name="Link(0,0)", pos=[0,0,0.5] , size=[self.Xs[(0,0)],self.Ys[(0,0)],random.random()])
         # pyrosim.Send_Joint( name = "Link(0,0)_Link(0,1)", parent= "Link(0,0)" , child = "Link(0,1)", type = "revolute", position = [0,self.Ys[(0,0)]/2,0.5], jointAxis = "0 0 1")
         # pyrosim.Send_Cube(name="Link(0,1)", pos=[0,self.Ys[(0,0)]/2,0] , size=[self.Xs[(0,1)],self.Ys[(0,1)],random.random()])
