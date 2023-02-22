@@ -11,8 +11,8 @@ class SOLUTION:
         
         self.num_links = random.randint(3,6)
         print(self.num_links)
-        self.numJoints = self.num_links**2 -1
-        self.joints = []
+        self.numJoints = self.num_links**2 -1 + 9*self.num_links
+        
         self.rand_links = []
         for _ in range(0, random.randint(1,self.num_links**2)):
             self.rand_links.append((random.randint(0,self.num_links-1),random.randint(0,self.num_links-1)))
@@ -69,6 +69,8 @@ class SOLUTION:
         f.close()
 
         pyrosim.Start_URDF("body"+str(self.myID)+".urdf")
+
+        self.joints = []
         if (0,0) in self.rand_links:
             pyrosim.Send_Cube(name="Link(0,0)", pos=[0,0,2.5] , size=[self.Xs[(0,0)],self.Ys[(0,0)],1], color = "green")
         else:
@@ -229,6 +231,7 @@ class SOLUTION:
         for currentRow in range(len(self.rand_links)):
             for currentCol in range(self.numJoints):
                 pyrosim.Send_Synapse(sourceNeuronName = self.numJoints + currentRow, targetNeuronName = currentCol, weight = self.weights[currentRow][currentCol] )
+
         pyrosim.End()
 
     def Mutate(self):
