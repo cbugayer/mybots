@@ -9,7 +9,8 @@ class SOLUTION:
 
     def __init__(self, AvailableID):
         
-        self.num_links = random.randint(3,6)
+        self.num_links = 3 #random.randint(3,6)
+
         print(self.num_links)
         self.numJoints = self.num_links**2 -1 + 9*self.num_links
         
@@ -236,30 +237,50 @@ class SOLUTION:
         
         randRow = random.randint(0,len(self.rand_links) - 1)
         randColumn = random.randint(0,self.numJoints- 1)
-        number = random.randint(0, 10)
-        if number == 0:
-            self.weights[randRow][randColumn] = random.random() * 2 - 1
-        elif number == 1:
-            self.Xs[(random.randint(0,self.num_links-1), random.randint(0,self.num_links-1))] = random.random()
-        elif number == 2:
-            self.Ys[(random.randint(0,self.num_links-1), random.randint(0,self.num_links-1))] = random.random()
-        elif number == 3:
-            self.Arms[random.randint(0,self.num_links*4-1)] = random.random() * 0.5
-        elif number == 4:
-            self.Legs[random.randint(0,self.num_links*4-1)] = random.random() * 2
-        elif number == 5:
-            self.rand_links[random.randint(0,len(self.rand_links)-1)] = (random.randint(0,self.num_links-1), random.randint(0,self.num_links-1))
-        elif number == 6:
-            self.rand_links[random.randint(0,len(self.rand_links)-1)] = 'Arm'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3))
-        elif number == 7:
-            self.rand_links[random.randint(0,len(self.rand_links)-1)] = 'Leg'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3))
-        elif number == 8:
-            self.rand_links.append((random.randint(0,self.num_links-1), random.randint(0,self.num_links-1)))
-        elif number == 9:
-            self.rand_links.append('Arm'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3)))
-        elif number == 10:
-            self.rand_links.append('Leg'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3)))
-    
+        number = random.randint(0, 13)
+        #number = 13
+        print(number)
+
+        # if number == 0:
+        #     self.weights[randRow][randColumn] = random.random() * 2 - 1
+        # elif number == 1:
+        #     self.Xs[(random.randint(0,self.num_links-1), random.randint(0,self.num_links-1))] = random.random()
+        # elif number == 2:
+        #     self.Ys[(random.randint(0,self.num_links-1), random.randint(0,self.num_links-1))] = random.random()
+        # elif number == 3:
+        #     self.Arms[random.randint(0,self.num_links*4-1)] = random.random() * 0.5
+        # elif number == 4:
+        #     self.Legs[random.randint(0,self.num_links*4-1)] = random.random() * 2
+        # elif number == 5:
+        #     del self.rand_links[random.randint(0,len(self.rand_links)-1)]
+        # # elif number == 5:
+        # #     self.rand_links[random.randint(0,len(self.rand_links)-1)] = (random.randint(0,self.num_links-1), random.randint(0,self.num_links-1))
+        # # elif number == 6:
+        # #     self.rand_links[random.randint(0,len(self.rand_links)-1)] = 'Arm'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3))
+        # # elif number == 7:
+        # #     self.rand_links[random.randint(0,len(self.rand_links)-1)] = 'Leg'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3))
+        # elif number == 8:
+        #     self.rand_links.append((random.randint(0,self.num_links-1), random.randint(0,self.num_links-1)))
+        #     while list(set(self.rand_links)) != self.rand_links:
+        #         self.rand_links.append((random.randint(0,self.num_links-1), random.randint(0,self.num_links-1)))
+        #     self.rand_links = list(set(self.rand_links))
+        # elif number == 9:
+        #     self.rand_links.append('Arm'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3)))
+        #     while list(set(self.rand_links)) != self.rand_links:
+        #         self.rand_links.append('Arm'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3)))
+        #     self.rand_links = list(set(self.rand_links))
+        # elif number == 10:
+        #     self.rand_links.append('Leg'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3)))
+        #     while list(set(self.rand_links)) != self.rand_links:
+        #         self.rand_links.append('Leg'+str(random.randint(0,self.num_links-1))+str(random.randint(0,3)))
+        #     self.rand_links = list(set(self.rand_links))
+        # elif number == 11:
+        #     self.rand_links.pop(random.randint(0,len(self.rand_links)-1))
+        # elif number == 12:
+        #     self.num_links += 1
+        # elif number == 13:
+        #     self.num_links -= 1
+
     def Set_ID(self, id):
         
         self.myID = id

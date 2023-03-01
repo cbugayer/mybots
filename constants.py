@@ -6,7 +6,7 @@ BLamplitude = np.pi/2
 BLfrequency = 10
 BLphaseOffset = np.pi/4
 
-BLmaxForce = 200
+BLmaxForce = 40
 
 FLamplitude = np.pi/2
 FLfrequency = 1000
