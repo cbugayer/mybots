@@ -18,9 +18,9 @@ target_angles = 2*np.pi
 
 time_sleep = 1/60
 
-numberOfGenerations = 1
+numberOfGenerations = 10
 
-populationSize = 1
+populationSize = 5
 
 numSensorNeurons = 9
 

@@ -59,7 +59,7 @@ class ROBOT:
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.RobotId)
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
-        fitness = -topX * topY * topZ
+        fitness = xPosition
         #f = open("fitness"+str(self.solutionID)+".txt", "w")
         f = open("tmp"+str(self.solutionID)+".txt", "w")
         
