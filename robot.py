@@ -32,6 +32,7 @@ class ROBOT:
 
     def Prepare_To_Sense(self):
         self.sensors = {}
+        print(pyrosim.linkNamesToIndices)
         for linkName in pyrosim.linkNamesToIndices:
             self.sensors[linkName] = SENSOR(linkName)
 
@@ -52,11 +53,13 @@ class ROBOT:
                 self.motors[jointName.encode('UTF-8')].Set_Value(self.RobotId, desiredAngle)
         
     def Think(self):
+        
         self.nn.Update()
        # self.nn.Print()
 
     def Get_Fitness(self,topX,topY,topZ):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.RobotId)
+
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
         fitness = xPosition

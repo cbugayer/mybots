@@ -9,8 +9,10 @@ class SOLUTION:
 
     def __init__(self, AvailableID):
         
-        self.num_links = random.randint(1,8)
+        self.num_links = random.randint(1,4)
         self.num_legs = random.randint(0,4)
+        if self.num_legs == 0 and self.num_links == 1:
+            self.num_legs = 1
 
         self.links = []
         for i in range(0, self.num_links):
@@ -34,10 +36,12 @@ class SOLUTION:
         #     for j in range(0,random.randint(0,4)):
         #         self.rand_links.append("Leg"+str(i)+str(j))
         
-        print(self.rand_links)
-        print(self.num_legs, "legs")
+        print(self.links)
         self.weights = numpy.random.rand(len(self.rand_links), self.numJoints)
         self.weights = self.weights * 2 - 1
+
+        self.fitness = 0
+
         self.Arms = numpy.random.rand(self.num_links*4) * .5
         self.Legs = numpy.random.rand(self.num_links*4) * 2
         # self.Ys = {}
@@ -329,10 +333,11 @@ class SOLUTION:
         f.close()
         pyrosim.Start_NeuralNetwork("brain" + s + ".nndf")
         
-        for i, Jname in enumerate(self.joints):
-            pyrosim.Send_Motor_Neuron(name = i, jointName = Jname)
+        
         for ind, rand in enumerate(self.rand_links):
             pyrosim.Send_Sensor_Neuron(name =  self.numJoints + ind, linkName = rand)
+        for i, Jname in enumerate(self.joints):
+            pyrosim.Send_Motor_Neuron(name = i, jointName = Jname)
         # print(self.weights.shape, "weight SHAPE")
         # print((len(self.rand_links), self.numJoints), "shape")
         for currentRow in range(len(self.rand_links)):
@@ -363,6 +368,12 @@ class SOLUTION:
             self.num_links += 1
             print("added body")
         elif number == 2:
+            if self.num_links == 1:
+                self.Mutate()
+                return
+            if self.num_links == 2 and self.num_legs == 0:
+                self.Mutate()
+                return
             self.num_links -= 1
             self.links.remove("Body" + str(self.num_links))
             for i in range(self.num_legs):
@@ -372,6 +383,7 @@ class SOLUTION:
                 indx = self.rand_links.index("Body" + str(self.num_links))
                 self.rand_links.remove("Body" + str(self.num_links))
                 self.weights = numpy.delete(self.weights, indx, 0)
+            
             for i in range(self.num_legs):
                 if "Leg"+str(self.num_links)+"right"+str(i) in self.rand_links:
                     indx = self.rand_links.index("Leg"+str(self.num_links)+"right"+str(i))
@@ -381,14 +393,20 @@ class SOLUTION:
                     indx = self.rand_links.index("Leg"+str(self.num_links)+"left"+str(i))
                     self.rand_links.remove("Leg"+str(self.num_links)+"left"+str(i))
                     self.weights = numpy.delete(self.weights, indx, 0)
-            print("removed body")
+            print("removed body", self.num_links, "left")
         elif number == 3:
             self.num_legs += 1
             for i in range(self.num_links):
                 self.links.append("Leg"+str(i)+"right"+str(self.num_legs-1))
                 self.links.append("Leg"+str(i)+"left"+str(self.num_legs-1))
-            print("added leg")
+            print("added leg", self.num_legs, "legs")
         elif number == 4:
+            if self.num_legs == 0:
+                self.Mutate()
+                return
+            if self.num_legs == 1 and self.num_links == 1:
+                self.Mutate()
+                return
             self.num_legs -= 1
             for i in range(self.num_links):
                 self.links.remove("Leg"+str(i)+"right"+str(self.num_legs))
@@ -401,8 +419,11 @@ class SOLUTION:
                     indx = self.rand_links.index("Leg"+str(i)+"left"+str(self.num_legs))
                     self.rand_links.remove("Leg"+str(i)+"left"+str(self.num_legs))
                     self.weights = numpy.delete(self.weights, indx, 0)
-            print("removed leg")
+            print("removed leg", self.num_legs, "legs left")
         elif number == 5:
+            if len(self.links) == len(self.rand_links):
+                self.Mutate()
+                return
             ind = random.randint(0,len(self.links)-1)
             while self.links[ind] in self.rand_links:
                 ind = random.randint(0,len(self.links)-1)
@@ -411,13 +432,12 @@ class SOLUTION:
             self.weights = numpy.concatenate((self.weights, new_arr))
             print("added sensor")
         elif number == 6:
-            ind = random.randint(0,len(self.links)-1)
-            while self.links[ind] not in self.rand_links:
-                ind = random.randint(0,len(self.links)-1)
-            # Find index of link in rand_links
-            indx = self.rand_links.index(self.links[ind])
-            self.rand_links.remove(self.links[ind])
-            self.weights = numpy.delete(self.weights, indx, 0)
+            if len(self.rand_links) == 0:
+                self.Mutate()   
+                return         
+            ind = random.randint(0,len(self.rand_links)-1)
+            self.rand_links.remove(self.rand_links[ind])
+            self.weights = numpy.delete(self.weights, ind, 0)
             print("removed sensor")
         # elif number == 1:
         #     self.Xs[(random.randint(0,self.num_links-1), random.randint(0,self.num_links-1))] = random.random()
@@ -481,3 +501,6 @@ class SOLUTION:
         print(self.fitness)
         f.close()
         os.system("del fitness"+str(self.myID)+".txt")
+
+    def Compute_Fitness(self):
+        return self.fitness
