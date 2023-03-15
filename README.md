@@ -8,6 +8,9 @@ The way to run the simulation is to run `python search.py` in your terminal.
 ![diag396-1](https://user-images.githubusercontent.com/108431409/225200953-cb3a1024-94d2-4a8b-9766-a5779f8fe35d.jpg)
 ![diag396-2](https://user-images.githubusercontent.com/108431409/225200969-204825e0-4bf7-40d5-b7a6-629cc26ad5ed.jpg)
 
+## Hypothesis 
+I thought the control group would do better than the experimental group. My thought process was, how could a creature whose body is constantly changing evolve as well as a creature with a constant body?
+
 ## Link to 10 second teaser
 https://youtu.be/JyvxqwchqPE
 
